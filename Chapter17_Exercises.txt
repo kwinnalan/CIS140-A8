@@ -1,0 +1,99 @@
+Chapter 17 The OpenSSH Secure Communication Utilities 
+
+  
+
+Exercises 
+
+  
+
+1. What is the difference between the scp and sftp utilities? 
+
+	While scp and sftp are network protocols that both can be used to transfer files from a local to remote or remote to remote computers. The sftp is more versatile allowing not only file transfer but also provides file access and file management. Sftp is a secureversion of FTP that is done over an ssh connection.  
+
+  
+
+2. How can you use ssh to find out who is logged in on a remote system named tiger? 
+
+	ssh tiger w 
+
+  
+
+3. How would you use scp to copy your ~/.bashrc file from the system named  
+
+plum to the local system? 
+
+	scp [[user@]from-host:]source-file [[user@]to-host:][destination-file] 
+
+		scp user@plum:~/.bashrc ~/bashrc 
+
+  
+
+4. How would you use ssh to run xterm on plum and show the display on the  
+local system? Your username on plum is max. 
+
+	ssh plum xterm 
+
+  
+
+5. What problem can enabling compression present when you are using ssh to  
+run remote X applications on a local display? 
+
+	Compression over ssh connection would increase network latency. This could use to much bandwidth and become undesirable for an X session. 
+
+  
+
+6. When you try to connect to a remote system using an OpenSSH client and  
+OpenSSH displays a message warning you that the remote host identification
+has changed, what has happened? What should you do? 
+
+	If OpenSSH displays this message, you might be the subject of an MITM attack. More 
+
+likely, however, something on the remote system changed, causing it to supply a new key. Check with the administrator of the remote system. If all is well, use an editor to remove the offending key from the specified file (the fourth line from the bottom in the preceding message points to the line you need to remove) and try connecting again. Alternately, you can use ssh-keygen with the –R option followed by the name of a host to remove an entry. When you reconnect, you will be subject to first-time authentication (page 707) again as OpenSSH verifies you are connecting to the correct system. Follow the same steps as when you initially connected to the remote host. 
+
+  
+
+Advanced Exercises 
+
+  
+
+7. Which scp command would you use to copy your home directory from  
+
+plum to the local system? 
+
+	scp -rp plum:~ ./ 
+
+  
+
+8. Which single command could you give to log in as max on the remote system  
+
+named plum and open a root shell (on plum)? Assume plum has remote root  
+
+logins disabled. 
+
+	ssh -t plum sudo -ipf 
+
+  
+
+9. How could you use ssh to compare the contents of the ~/memos directories  
+
+on plum and the local system? 
+
+	ssh plum ls ~/memos > memos/ls.out 
+
+		ls ~/memos | ssh plum diff - memos/ls.out    
+
+  
+
+10. How would you use rsync along with OpenSSH authentication to copy the  
+
+memos12 file from the working directory on the local system to your home  
+
+directory on plum? How would you copy the memos directory from the  
+
+working directory on the local system to your home directory on plum and  
+
+cause rsync to display each file as it copied the file? 
+
+	rsync memos12 plum 
+
+		rsync -av memos plum 
